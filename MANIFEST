@@ -1,0 +1,7 @@
+Build.PL
+lib/Test/Builder/Compat.pm
+MANIFEST			This list of files
+t/simple.t
+README
+META.yml
+META.json

@@ -1,0 +1,47 @@
+{
+   "abstract" : "Write test tools that use new Test::Builder deatures",
+   "author" : [
+      "Chad Granum <exodist7@gmail.com>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4205",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Test-Builder-Compat",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.42"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Test::Simple" : "0.88"
+         }
+      }
+   },
+   "provides" : {
+      "Test::Builder::Compat" : {
+         "file" : "lib/Test/Builder/Compat.pm",
+         "version" : "0.001001"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://github.com/Test-More/Test-Builder-Compat/issues"
+      },
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "http://github.com/Test-More/Test-Builder-Compat"
+      }
+   },
+   "version" : "0.001001"
+}

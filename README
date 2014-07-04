@@ -1,0 +1,80 @@
+NAME
+    Test::Builder::Compat - Write test tools that use new Test::Builder
+    deatures when available, but still work with old Test::Builders.
+
+DESCRIPTION
+    The new Test::Builder introduces a lot of new features and capabilities.
+    These are nice! But using them means requiring consumers of your module
+    to depend on a newer version of Test::Builder to install.
+
+    With this module you can write testing tools that work on new and old
+    versions of Test::Builder. Write for the new builder, and test your
+    testing tools with the new builder, then add a few token tests to insure
+    sane-base behavior on older test builders.
+
+SYNOPSYS
+        package My::TestLib;
+        use strict;
+        use warnings;
+
+        # Will either use Test::Builder::Provider for you, if available
+        use Test::Builder::Compat qw/builder provides/;
+
+        # Note, unlike using Test::Builder:Provider directly, provides will not
+        # cause things to be exported, if you want to export things you need to use
+        # an export tool yourself. Exporter.pm and most other exporters *should*
+        # preserve the marking magic 'provides' endows.
+        provides qw/ok is/;
+
+        # builder() will do the right thing in either situation.
+        sub ok($;$) { builder->ok(@_) }
+
+        sub is($$;$) {
+            my ($got, $want, $name) = @_;
+            # use HAS_PROVIDER() to make $Level bumps conditional
+            local $Test::Builder::Level = $Test::Builder::Level + 1 unless HAS_PROVIDER;
+            ok($got eq $want, $name);
+        }
+
+        1;
+
+EXPORTS
+    $bool = HAS_PROVIDER()
+        True if the newer Test::Builder is present and loaded.
+
+        This is useful for conditioning localization of
+        $Test::Builder::Level:
+
+            local $Test::Builder::Level = $Test::Builder::Level + 1 unless HAS_PROVIDER;
+
+        You do not want to localize $Level on a newer Test::Builder.
+
+    $tb = builder()
+        Get the proper instance of Test::Builder
+
+    provides(...)
+        Mark testing tools as such (See Test::Builder::Provider). When used
+        with an old Test::Builder this is a no-op.
+
+    provide_nests(...)
+        Mark testing tools as such (See Test::Builder::Provider). When used
+        with an old Test::Builder this is a no-op.
+
+SEE ALSO
+    Test::Builder::Provider
+
+AUTHORS
+    Chad Granum <exodist@cpan.org>
+
+SOURCE
+    The source code repository for Test::Builder::Compat can be found at
+    http://github.com/xxx/.
+
+COPYRIGHT
+    Copyright 2014 Chad Granum <exodist7@gmail.com>.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+    See http://www.perl.com/perl/misc/Artistic.html
+

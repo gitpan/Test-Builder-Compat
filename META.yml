@@ -15,11 +15,11 @@ name: Test-Builder-Compat
 provides:
   Test::Builder::Compat:
     file: lib/Test/Builder/Compat.pm
-    version: '0.001001'
+    version: '0.001002'
 requires:
   Test::Simple: '0.88'
 resources:
   bugtracker: http://github.com/Test-More/Test-Builder-Compat/issues
   license: http://dev.perl.org/licenses/
   repository: http://github.com/Test-More/Test-Builder-Compat
-version: '0.001001'
+version: '0.001002'

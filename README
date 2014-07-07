@@ -18,7 +18,7 @@ SYNOPSYS
         use warnings;
 
         # Will either use Test::Builder::Provider for you, if available
-        use Test::Builder::Compat qw/builder provides/;
+        use Test::Builder::Compat qw/builder provides nest/;
 
         # Note, unlike using Test::Builder:Provider directly, provides will not
         # cause things to be exported, if you want to export things you need to use
@@ -35,6 +35,13 @@ SYNOPSYS
             local $Test::Builder::Level = $Test::Builder::Level + 1 unless HAS_PROVIDER;
             ok($got eq $want, $name);
         }
+
+        sub testblock(&) {
+            my $code = shift;
+            # use HAS_PROVIDER() to make $Level bumps conditional
+            local $Test::Builder::Level = $Test::Builder::Level + 2 unless HAS_PROVIDER;
+            ok(nest \&$code, "block returned true");
+        };
 
         1;
 
@@ -56,9 +63,11 @@ EXPORTS
         Mark testing tools as such (See Test::Builder::Provider). When used
         with an old Test::Builder this is a no-op.
 
-    provide_nests(...)
-        Mark testing tools as such (See Test::Builder::Provider). When used
-        with an old Test::Builder this is a no-op.
+    nest { ... }
+    nest( \&$code )
+    &nest($code)
+        Run a codeblock that has tests. The tests will trace to the
+        codeblock instead of your tool.
 
 SEE ALSO
     Test::Builder::Provider

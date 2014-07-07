@@ -28,7 +28,7 @@
    "provides" : {
       "Test::Builder::Compat" : {
          "file" : "lib/Test/Builder/Compat.pm",
-         "version" : "0.001001"
+         "version" : "0.001002"
       }
    },
    "release_status" : "stable",
@@ -43,5 +43,5 @@
          "url" : "http://github.com/Test-More/Test-Builder-Compat"
       }
    },
-   "version" : "0.001001"
+   "version" : "0.001002"
 }

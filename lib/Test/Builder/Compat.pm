@@ -2,14 +2,14 @@ package Test::Builder::Compat;
 use strict;
 use warnings;
 
-our $VERSION = '0.001001';
+our $VERSION = '0.001002';
 
 my $HAS_PROVIDER = eval { require Test::Builder::Provider; 1 };
 
 sub import {
     my $class = shift;
     my $caller = caller;
-    my @import = @_ ? @_ : qw/provides provide_nests builder/;
+    my @import = @_ ? @_ : qw/provides nest builder/;
 
     {
         no strict 'refs';
@@ -20,11 +20,10 @@ sub import {
         if $HAS_PROVIDER;
 
     require Test::Builder;
-    for my $sub (@import) {
-        my $code = $sub eq 'builder' ? sub { Test::Builder->new } : sub { 0 };
-        no strict 'refs';
-        *{"$caller\::$sub"} = $code;
-    }
+    no strict 'refs';
+    *{"$caller\::builder"}  = sub { Test::Builder->new };
+    *{"$caller\::provides"} = sub { 0 };
+    *{"$caller\::nest"}     = sub(&) { $_[0]->() };
 }
 
 1;
@@ -54,7 +53,7 @@ older test builders.
     use warnings;
 
     # Will either use Test::Builder::Provider for you, if available
-    use Test::Builder::Compat qw/builder provides/;
+    use Test::Builder::Compat qw/builder provides nest/;
 
     # Note, unlike using Test::Builder:Provider directly, provides will not
     # cause things to be exported, if you want to export things you need to use
@@ -71,6 +70,13 @@ older test builders.
         local $Test::Builder::Level = $Test::Builder::Level + 1 unless HAS_PROVIDER;
         ok($got eq $want, $name);
     }
+
+    sub testblock(&) {
+        my $code = shift;
+        # use HAS_PROVIDER() to make $Level bumps conditional
+        local $Test::Builder::Level = $Test::Builder::Level + 2 unless HAS_PROVIDER;
+        ok(nest \&$code, "block returned true");
+    };
 
     1;
 
@@ -97,10 +103,14 @@ Get the proper instance of L<Test::Builder>
 Mark testing tools as such (See L<Test::Builder::Provider>). When used with an
 old Test::Builder this is a no-op.
 
-=item provide_nests(...)
+=item nest { ... }
 
-Mark testing tools as such (See L<Test::Builder::Provider>). When used with an
-old Test::Builder this is a no-op.
+=item nest( \&$code )
+
+=item &nest($code)
+
+Run a codeblock that has tests. The tests will trace to the codeblock instead
+of your tool.
 
 =back
 

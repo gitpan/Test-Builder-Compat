@@ -11,7 +11,7 @@ use Test::More;
     use Test::Builder::Compat;
 }
 
-can_ok( 'My::Tool', qw/HAS_PROVIDER provides provide_nests/ );
+can_ok( 'My::Tool', qw/HAS_PROVIDER provides nest builder/ );
 
 if($INC{'Test/Builder/Provider.pm'}) {
     ok(My::Tool::HAS_PROVIDER(), "HAS_PROVIDER tells the truth ($INC{'Test/Builder/Provider.pm'})")
